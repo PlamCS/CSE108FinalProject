@@ -3,7 +3,7 @@ bidict==0.23.1
 blinker==1.8.1
 click==8.1.7
 colorama==0.4.6
-flask==1.0.2
+Flask==3.0.3
 Flask-Admin==1.6.1
 Flask-Bcrypt==1.0.1
 Flask-Cors==4.0.1
