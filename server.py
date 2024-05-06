@@ -222,6 +222,3 @@ def handle_start_line(data):
 #    width = data.get("width")
 #   socket_id = request.sid  # Get the socket ID
 #    emit("change_width", {"width": width, "socket_id": socket_id})
-
-if __name__ == "__main__":
-    socketio.run(app, debug=True)
