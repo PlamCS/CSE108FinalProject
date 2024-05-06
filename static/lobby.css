@@ -1,0 +1,15 @@
+#lobby-interface {
+  background-color: #8d99ae;
+  border-radius: 25px;
+  padding: 30px;
+  margin: 0;
+  color: #edf2f4;
+}
+
+#lobby-buttons {
+  background-color: #2b2d42;
+  border: solid 1px black;
+  border-radius: 25px;
+  padding: 5px;
+  color: #edf2f4;
+}

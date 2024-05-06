@@ -1,0 +1,22 @@
+<link rel="stylesheet" href="{{ url_for('static', filename='lobby.css') }}" />
+{% extends "base.html"%} {% block content %}
+<form id="lobby-interface" method="post">
+  <h3 id="lobby-header">Enter The Chat Room</h3>
+  <div>
+    <input type="text" placeholder="Name" name="name" value="{{name}}" />
+  </div>
+  <div>
+    <input type="text" placeholder="Room Code" name="code" value="{{code}}" />
+    <button id="lobby-buttons" type="submit" name="join">Join a Room</button>
+  </div>
+  <button id="lobby-buttons" type="submit" name="create" class="create-btn">
+    Create a Room
+  </button>
+  {% if error %}
+  <ul>
+    <li>{{error}}</li>
+  </ul>
+  {% endif %}
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.1.3/socket.io.js"></script>
+</form>
+{% endblock %}

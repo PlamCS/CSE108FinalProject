@@ -1,0 +1,113 @@
+.title-header{
+  display: block;
+  top: 0;
+  left: 0;
+  position: fixed;
+  color: white;
+  margin-left: 50px;
+}
+
+#room-interface {
+  border: solid 2px #ccc;
+  background-color: #4162d9;
+  display: flex;
+  padding: 20px;
+}
+
+
+#room-header {
+  color: #edf2f4;
+  height: 30px;
+  margin: 0;
+  padding: 0;
+}
+
+#drawing-board {
+  width: 690px;
+  height: 550px;
+  border: solid 2px #ccc;
+  background-color: white;
+  border-radius: 6px;
+}
+
+#drawing-controls {
+  height: 76px;
+  width: 670px;
+  padding: 10px;
+  border: solid 2px #ccc;
+  background-color: #4162d9;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  border-radius: 6px;
+}
+
+#room-messages {
+  height: 530px;
+  padding-left: 20px;
+}
+
+#messages {
+  height: 599px;
+  width: 230px;
+  margin-top: 30px;
+  align-items: stretch;
+  color: #edf2f4;
+  background-color: #4162d9;
+  border: solid 2px #ccc;
+  overflow-y: scroll;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  border-radius: 6px;
+}
+
+
+input#message {
+  height: 30px;
+  width: calc(100%);
+  margin-top: 10px;
+  border-radius: 6px;
+  border: solid 2px #ccc;
+}
+
+.download-button{
+  
+  background-color: #007bff;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+  height: 25px;
+  margin-left: 10px;
+  transition: background-color 0.3s ease;
+}
+
+.download-button:hover{
+  background-color: #0056b3;
+}
+
+label.line-width,
+label.eraser-toggle{
+  color: white;
+}
+
+.slider{
+  -webkit-appearance: none;
+  height: 15px;
+  border-radius: 5px;  
+  background: #d3d3d3;
+  outline: none;
+  opacity: 0.7;
+  -webkit-transition: .2s;
+  transition: opacity .2s;
+}
+
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%; 
+  background: #2c34a7;
+  cursor: pointer;
+}
