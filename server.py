@@ -224,4 +224,6 @@ def handle_start_line(data):
 #    emit("change_width", {"width": width, "socket_id": socket_id})
 
 if __name__ == "__main__":
+    import eventlet
+    eventlet.monkey_patch()
     socketio.run(app, host='0.0.0.0', port=8000)
