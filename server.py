@@ -54,7 +54,7 @@ def generate_unique_code(length):
             return code
         
 @app.route("/", methods=["POST", "GET"])
-def home():
+def index():
     session.clear()
     if request.method == "POST":
         name = request.form.get("name")
@@ -87,11 +87,11 @@ def home():
 def room():
     room_code = session.get("room")
     if room_code is None or session.get("name") is None:
-        return redirect(url_for("home"))
+        return redirect(url_for("index"))
 
     room = Room.query.filter_by(code=room_code).first()
     if not room:
-        return redirect(url_for("home"))
+        return redirect(url_for("index"))
 
     messages = Message.query.filter_by(room_id=room.id).all()
     return render_template("room.html", code=room_code, messages=messages)
