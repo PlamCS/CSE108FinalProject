@@ -1,23 +1,33 @@
 #lobby-interface {
-  background-color: #8d99ae;
-  border-radius: 25px;
-  padding: 30px;
-  margin: 0;
-  color: #edf2f4;
+  max-width: 400px;
+  max-height: 250px;
+  margin: 50px auto;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-#lobby-buttons {
-  background-color: #2b2d42;
-  border: solid 1px black;
-  border-radius: 25px;
-  padding: 5px;
-  color: #edf2f4;
+input[type="text"],
+button {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+button {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  cursor: pointer;
 }
 
 .error-list {
   list-style-type: none;
   display: inline-block; /* Adjust display property */
-  padding: 5px;
   margin: 5px 0;
   border: 1px solid #ff5a5a;
   background-color: #ffebeb;

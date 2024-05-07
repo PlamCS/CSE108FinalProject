@@ -29,6 +29,8 @@
         Download Drawing
       </button>
 
+      <button id="leave-room-btn" class="lobby-leave">Leave Room</button>
+
       <!-- Color picker -->
       <div class="color-boxes">
         <div class="color-box white" data-color="#FFFFFF"></div>
@@ -58,7 +60,6 @@
         id="message"
       />
     </div>
-    <button id="leave-room-btn">Leave Room</button>
   </div>
 </div>
 
@@ -115,7 +116,6 @@
 
   const roomHeader = document.getElementById("room-header");
   // Extract the room code by splitting the text
-  // Assuming the format is "Chat and Draw Room: XYZ123"
   const roomCode = roomHeader.textContent.split(": ")[1];
   console.log(`The room code is: ${roomCode}`);
 
@@ -270,53 +270,6 @@
     lineWidth = $(this).val();
   });
 
-  /*
-  // Get references to your canvas and the download button
-  const downloadBtn = document.getElementById("download-btn");
-
-  function setCanvasBackgroundWhite() {
-    // Save the current drawing state
-    const prevFillStyle = context.fillStyle;
-
-    // Set the fill style to white and fill the entire canvas
-    context.fillStyle = "#FFFFFF"; // White background
-    context.fillRect(0, 0, canvas.width, canvas.height);
-
-    // Restore the previous drawing state
-    context.fillStyle = prevFillStyle;
-  }
-
-  // Add a click event listener to the download button
-  downloadBtn.addEventListener("click", function () {
-    // Backup current canvas content
-    const existingContent = context.getImageData(
-      0,
-      0,
-      canvas.width,
-      canvas.height
-    );
-
-    // Set a white background first
-    setCanvasBackgroundWhite();
-
-    // Redraw the existing content over the white background
-    context.putImageData(existingContent, 0, 0);
-
-    // Export to a PNG file with the desired name
-    const imageData = canvas.toDataURL("image/png");
-    const link = document.createElement("a");
-    link.href = imageData;
-    link.download = "canvas_drawing.png";
-
-    // Trigger the download process
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-
-        // Restore the original content (optional)
-        context.putImageData(existingContent, 0, 0);
-    });
-    */
   const downloadBtn = document.getElementById("download-btn");
 
   function uploadCanvasDataUrl() {

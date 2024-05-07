@@ -1,0 +1,19 @@
+<link rel="stylesheet" href="{{ url_for('static', filename='profile.css') }}" />
+{% extends "base.html" %}
+{% block content %}
+    <div class="user-profile">
+        <h1>{{ current_user.username }}'s Profile</h1>
+        <h2>Uploaded Images</h2>
+        <ul class="uploaded-images">
+        {% if drawings %}
+            {% for drawing in drawings %}
+                <li>
+                    <img class="uploaded-image" src="{{ drawing.data_url }}" alt="User Uploaded Image" />
+                </li>
+            {% endfor %}
+        {% else %}
+            <p>No images uploaded yet.</p>
+        {% endif %}
+        </ul>
+    </div>
+{% endblock %}

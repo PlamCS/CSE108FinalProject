@@ -24,9 +24,17 @@
       <a href="javascript:void(0)" class="closebtn" onclick="closeNav()"
         >&times;</a
       >
+      {% if current_user.role == "admin"%}
+      <a href="{{url_for('admin.index')}}">Admin</a>
+      {%endif%} {% if current_user.username %}
+      <a href="{{url_for('profile')}}">Profile</a>
+      {%endif%} {% if not current_user.username %}
       <a href="{{url_for('login')}}">Login</a>
+      {%endif%}
       <a href="{{url_for('room')}}">Rooms</a>
+      {% if current_user.username %}
       <a href="{{url_for('logout')}}">Logout</a>
+      {% endif %}
     </div>
     {% block content %} {% endblock %}
   </body>

@@ -32,6 +32,7 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), unique=True, nullable=False)
     password = db.Column(db.String(80), nullable=False)
+    role = db.Column(db.String(20), nullable=False, default='user')
     @property
     def is_active(self):
         return True
@@ -44,23 +45,35 @@ class User(db.Model):
 class Drawing(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    filename = db.Column(db.Text, nullable=False)
+    data_url = db.Column(db.Text, nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
 class Room(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     code = db.Column(db.String(4), unique=True, nullable=False)
     members = db.Column(db.Integer, default=0)
-    messages = db.relationship('Message', backref='room', lazy=True)
+    messages = db.relationship('Message', backref='room', lazy=True, cascade='all, delete-orphan')
 
 class Message(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     content = db.Column(db.Text, nullable=False)
-    room_id = db.Column(db.Integer, db.ForeignKey('room.id'), nullable=False)
+    room_id = db.Column(db.Integer, db.ForeignKey('room.id', ondelete='SET NULL'), nullable=False)
     sender = db.Column(db.String(100), nullable=False)
     timestamp = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
 
-admin = Admin(app, name='Chat and Draw Admin', template_mode='bootstrap3')
+class MyAdminIndexView(AdminIndexView):
+    @expose('/')
+    @login_required
+    def index(self):
+        if current_user.role != 'admin':
+            return redirect(url_for("login"))
+        return redirect(url_for('user.index_view'))
+
+    @expose('/login')
+    def login_view(self):
+        return redirect(url_for("login"))
+
+admin = Admin(app, name='Chat and Draw Admin', template_mode='bootstrap3', index_view=MyAdminIndexView())
 admin._menu = admin._menu[1:]
 admin.add_view(ModelView(User, db.session))
 admin.add_view(ModelView(Drawing, db.session))
@@ -80,30 +93,7 @@ def generate_unique_code(length):
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
-        
-@app.route('/upload_canvas_url', methods=['POST'])
-def upload_canvas_url():
-    if 'username' not in session:
-        return jsonify({'error': 'User not logged in'}), 401
 
-    data = request.get_json()
-    data_url = data.get('data_url')
-
-    if not data_url:
-        return jsonify({'error': 'Missing data URL'}), 400
-
-    # Find the user in the database
-    user = User.query.filter_by(username=session['username']).first()
-    if not user:
-        return jsonify({'error': 'User not found'}), 404
-
-    # Add the new drawing entry with the data URL
-    new_drawing = Drawing(user_id=user.id, data_url=data_url)
-    db.session.add(new_drawing)
-    db.session.commit()
-
-    return jsonify({'success': 'Data URL stored successfully'}), 200
-        
 @app.route("/", methods=["POST", "GET"])
 def index():
     if request.method == "POST":
@@ -222,13 +212,13 @@ def message(data):
         new_message = Message(content=data["data"], room_id=room.id, sender=name)
         db.session.add(new_message)
         db.session.commit()
-        emit("message", {"name": name, "message": data["data"]}, room=room_code)
+        emit("message", {"name": f"{name}:", "message": data["data"]}, room=room_code)
         print("Message sent successfully")
     except Exception as e:
         print("Error:", e)
 
 @socketio.on("connect")
-def connect(auth):
+def connect():
     room_code = session.get("room")
     name = session.get("name")
     if not room_code or not name:
@@ -242,7 +232,7 @@ def connect(auth):
     room.members += 1
 
     # Add join message to the room's message history
-    message_content = f"{name} has entered the room"
+    message_content =  "has entered the room"
     new_message = Message(content=message_content, sender=name, room_id=room.id)
     db.session.add(new_message)
     db.session.commit()
@@ -274,7 +264,7 @@ def disconnect():
         db.session.delete(room)
     db.session.commit()
     
-    message_content = f"{name} has left the room"
+    message_content = "has left the room"
     message = Message(content=message_content, sender=name, room_id=room.id)
     db.session.add(message)
     db.session.commit()
@@ -303,11 +293,6 @@ def handle_change_width(data):
 def handle_start_line():
     emit('start_line', broadcast=True) 
 
-#@socketio.on("draw")
-#def handle_draw(data):
-    # Broadcast drawing data to all clients
-#    emit("draw", data, broadcast=True)
-
 @socketio.on("draw")
 def handle_draw(data):
     # Broadcast drawing data to all clients
@@ -319,19 +304,34 @@ def handle_start_line(data):
     room_code = data['room']
     emit("start_line", room=room_code)
 
-#@socketio.on("change_color")
-#def handle_change_color(data):
-    # Handle line color change event
-#    color = data.get("color")
-#    socket_id = request.sid  # Get the socket ID
-#    emit("change_color", {"color": color, "socket_id": socket_id})
+@app.route('/upload_canvas_url', methods=['POST'])
+@login_required
+def upload_canvas_url():
+    # `current_user` is the authenticated user object provided by Flask-Login
+    if not current_user.is_authenticated:
+        return jsonify({'error': 'User not logged in'}), 401
 
-#@socketio.on("change_width")
-#def handle_change_width(data):
-    # Handle line width change event
-#    width = data.get("width")
-#   socket_id = request.sid  # Get the socket ID
-#    emit("change_width", {"width": width, "socket_id": socket_id})
+    data = request.get_json()
+    data_url = data.get('data_url')
+
+    if not data_url:
+        return jsonify({'error': 'Missing data URL'}), 400
+
+    # Create a new drawing with the ID of the currently logged-in user
+    new_drawing = Drawing(user_id=current_user.id, data_url=data_url)
+    db.session.add(new_drawing)
+    db.session.commit()
+
+    return jsonify({'success': 'Data URL stored successfully'}), 200
+
+@app.route('/profile')
+@login_required
+def profile():
+    # Get all drawings linked to the currently logged-in user
+    user_drawings = Drawing.query.filter_by(user_id=current_user.id).all()
+    
+    # Pass the drawings to the profile template
+    return render_template('profile.html', drawings=user_drawings)
 
 @socketio.on("leave_room")
 def handle_leave_room(data):
@@ -372,7 +372,6 @@ def handle_leave_room(data):
 
     send({"name": name, "message": message_content}, to=room_code)
     print(f"{name} has left the room {room_code}")
-
 
 if __name__ == "__main__":
     socketio.run(app, host='0.0.0.0', port=5000)

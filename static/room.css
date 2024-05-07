@@ -136,18 +136,18 @@ input#message {
 }
 
 .download-button {
-  background-color: #007bff;
+  background-color: #1aa549;
   color: white;
   border: none;
   cursor: pointer;
   border-radius: 5px;
-  height: 25px;
-  margin-left: 10px;
+  height: 36px;
+  margin-left: 30px;
   transition: background-color 0.3s ease;
 }
 
 .download-button:hover {
-  background-color: #0056b3;
+  background-color: #1e7e3e;
 }
 
 label.line-width,
@@ -191,3 +191,20 @@ input[type="checkbox"]:checked {
   background: #2c34a7;
   cursor: pointer;
 }
+
+.lobby-leave{
+  height: 36px;
+  width: 123.88px;
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+  margin-left: 30px;
+  transition: background-color 0.3s ease;
+}
+
+.lobby-leave:hover{
+  background-color: #b32a38;
+}
+
