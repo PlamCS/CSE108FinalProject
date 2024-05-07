@@ -374,4 +374,4 @@ def handle_leave_room(data):
     print(f"{name} has left the room {room_code}")
 
 if __name__ == "__main__":
-    socketio.run(app, debug=True)
+    socketio.run(app, host='0.0.0.0', port=5000)
