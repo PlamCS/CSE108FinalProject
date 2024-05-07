@@ -1,0 +1,24 @@
+<!-- register.html -->
+<title>Register</title>
+<link
+  rel="stylesheet"
+  type="text/css"
+  href="{{ url_for('static', filename='login.css') }}"
+/>
+<link
+  rel="stylesheet"
+  type="text/css"
+  href="{{ url_for('static', filename='index.css') }}"
+/>
+{% include "base.html" %} {% block content %}
+<div class="content">
+  <form action="{{ url_for('register') }}" method="post" class = form-style>
+    <h2>Register</h2>
+    <input type="text" name="username" placeholder="Username" required />
+    <input type="password" name="password" placeholder="Password" required />
+    <input type="password" name="confirm_password" placeholder="Confirm Password" required /><br>
+    <button type="submit">Register</button>
+    <p class = test>Already have an account? <a href="{{ url_for('login') }}">Login</a></p>
+  </form>
+</div>
+{% endblock %}

@@ -1,0 +1,52 @@
+.container {
+  max-width: 400px;
+  max-height: 250px;
+  margin: 50px auto;
+  padding: 20px;
+  background-color: #2b2d42;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+  margin-top: 0;
+}
+
+form {
+  max-width: 400px;
+  max-height: 250px;
+  margin: 50px auto;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+input[type="text"],
+input[type="password"],
+button {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+button {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+canvas {
+  border: 2px solid #000000;
+  background-color: #ffffff;
+  margin-bottom: 20px;
+  position: relative;
+}
+

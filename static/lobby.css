@@ -13,3 +13,18 @@
   padding: 5px;
   color: #edf2f4;
 }
+
+.error-list {
+  list-style-type: none;
+  display: inline-block; /* Adjust display property */
+  padding: 5px;
+  margin: 5px 0;
+  border: 1px solid #ff5a5a;
+  background-color: #ffebeb;
+  border-radius: 5px;
+}
+
+.error-list li {
+  color: #ff5a5a; /* Set color of error message */
+  font-size: 16px; /* Set font size of error message */
+}

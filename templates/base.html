@@ -5,7 +5,11 @@
     <title>Doodle Fusion</title>
     <link rel="stylesheet" href="{{url_for('static', filename='index.css')}}" />
     <link rel="stylesheet" href="{{ url_for('static', filename='nav.css') }}" />
-    <link rel="stylesheet" href="{{ url_for('static', filename='room.css') }}" />
+    <link rel="stylesheet" href="{{url_for('static', filename='room.css')}}" />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='room.css') }}"
+    />
     <script
       src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"
       integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA=="
@@ -14,15 +18,15 @@
     <script src="{{ url_for('static', filename='nav.js') }}"></script>
   </head>
   <body class="content">
-    <h1 id = "title" class = "title-header">Doodle Fusion</h1>
+    <h1 id="title" class="title-header">Doodle Fusion</h1>
     <button class="openbtn" onclick="openNav()">&#9776;</button>
     <div id="mySidepanel" class="sidepanel">
       <a href="javascript:void(0)" class="closebtn" onclick="closeNav()"
         >&times;</a
       >
-      <a href="">Login</a>
-      <a href="">Rooms</a>
-      <a href="">Logout</a>
+      <a href="{{url_for('login')}}">Login</a>
+      <a href="{{url_for('room')}}">Rooms</a>
+      <a href="{{url_for('logout')}}">Logout</a>
     </div>
     {% block content %} {% endblock %}
   </body>

@@ -3,17 +3,24 @@
 <form id="lobby-interface" method="post">
   <h3 id="lobby-header">Enter The Chat Room</h3>
   <div>
+    {% if not current_user.username %}
     <input type="text" placeholder="Name" name="name" value="{{name}}" />
+    {% else %}
+    <input type="hidden" name="name" value="{{current_user.username}}" />
+    <input type="text" value="{{current_user.username}}" disabled />
+    {% endif %}
   </div>
   <div>
     <input type="text" placeholder="Room Code" name="code" value="{{code}}" />
     <button id="lobby-buttons" type="submit" name="join">Join a Room</button>
   </div>
-  <button id="lobby-buttons" type="submit" name="create" class="create-btn">
-    Create a Room
-  </button>
+  <div>
+    <button id="lobby-buttons" type="submit" name="create" class="create-btn">
+      Create a Room
+    </button>
+  </div>
   {% if error %}
-  <ul>
+  <ul class="error-list">
     <li>{{error}}</li>
   </ul>
   {% endif %}

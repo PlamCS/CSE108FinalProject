@@ -2,9 +2,7 @@
 
 {% extends "base.html"%}{% block content %}
 
-
 <div id="room-interface">
-  
   <div id="room-display">
     <h2 id="room-header">Chat and Draw Room: {{ code }}</h2>
     <canvas id="drawing-board" width="690" height="550"></canvas>
@@ -15,12 +13,38 @@
 
       <!-- Line width -->
       <label for="line-width" class="line-width">Line Width:</label>
-      <input type="range" id="line-width" min="1" max="20" value="2" class = "slider"/>
+      <input
+        type="range"
+        id="line-width"
+        min="1"
+        max="20"
+        value="2"
+        class="slider"
+      />
 
       <!-- Color picker -->
       <input type="color" id="color-picker" value="#000000" />
 
-      <button id="download-btn" class = "download-button">Download Drawing</button>
+      <button id="download-btn" class="download-button">
+        Download Drawing
+      </button>
+
+      <!-- Color picker -->
+      <div class="color-boxes">
+        <div class="color-box white" data-color="#FFFFFF"></div>
+        <div class="color-box light-gray" data-color="#C1C1C1"></div>
+        <div class="color-box red" data-color="#EF130B"></div>
+        <div class="color-box orange" data-color="#FF7100"></div>
+        <div class="color-box yellow" data-color="#FFE400"></div>
+        <div class="color-box green" data-color="#00CC00"></div>
+        <div class="color-box mint" data-color="#00FF91"></div>
+        <div class="color-box skyblue" data-color="#00B2FF"></div>
+        <div class="color-box seablue" data-color="#231FD3"></div>
+        <div class="color-box purple" data-color="#A300BA"></div>
+        <div class="color-box pink" data-color="#DF69A7"></div>
+        <div class="color-box beige" data-color="#FFAC8E"></div>
+        <div class="color-box brown" data-color="#A0522D"></div>
+      </div>
     </div>
   </div>
   <div id="room-messages">
@@ -33,8 +57,8 @@
         name="message"
         id="message"
       />
-     
     </div>
+    <button id="leave-room-btn">Leave Room</button>
   </div>
 </div>
 
@@ -71,6 +95,16 @@
     message.value = "";
   };
 
+  // Handle the leave button click
+  const leaveRoomBtn = document.getElementById("leave-room-btn");
+  leaveRoomBtn.addEventListener("click", function () {
+    // Emit the "leave_room" event to the server with the room code
+    socketio.emit("leave_room", { room: roomCode });
+
+    // Redirect to the lobby page
+    window.location.href = "/";
+  });
+
   const canvas = document.getElementById("drawing-board");
   const context = canvas.getContext("2d");
   let isDrawing = false;
@@ -104,7 +138,7 @@
     context.fillRect(0, 0, canvas.width, canvas.height);
   }
   // Call this function when the canvas is first loaded to initialize the background
-  setCanvasWhiteBackground(); 
+  setCanvasWhiteBackground();
 
   // Change line color
   $("#color-picker").on("change", function () {
@@ -180,7 +214,14 @@
     localLastY = y;
 
     // Emit draw data to the server
-    socketio.emit("draw", { x, y, isErasing, lineColor, lineWidth, room: roomCode });
+    socketio.emit("draw", {
+      x,
+      y,
+      isErasing,
+      lineColor,
+      lineWidth,
+      room: roomCode,
+    });
   }
 
   function stopDrawing() {
@@ -219,50 +260,92 @@
     lineColor = $(this).val();
   });
 
+  //Handle line color change event for color boxes
+  $(".color-box").on("click", function () {
+    lineColor = $(this).attr("data-color");
+  });
+
   // Handle line width change event
   $("#line-width").on("change", function () {
     lineWidth = $(this).val();
   });
+
+  /*
   // Get references to your canvas and the download button
-    const downloadBtn = document.getElementById("download-btn");
+  const downloadBtn = document.getElementById("download-btn");
 
-    function setCanvasBackgroundWhite() {
+  function setCanvasBackgroundWhite() {
     // Save the current drawing state
-        const prevFillStyle = context.fillStyle;
+    const prevFillStyle = context.fillStyle;
 
-        // Set the fill style to white and fill the entire canvas
-        context.fillStyle = "#FFFFFF"; // White background
-        context.fillRect(0, 0, canvas.width, canvas.height);
+    // Set the fill style to white and fill the entire canvas
+    context.fillStyle = "#FFFFFF"; // White background
+    context.fillRect(0, 0, canvas.width, canvas.height);
 
-        // Restore the previous drawing state
-        context.fillStyle = prevFillStyle;
-    }
+    // Restore the previous drawing state
+    context.fillStyle = prevFillStyle;
+  }
 
-    // Add a click event listener to the download button
-    downloadBtn.addEventListener("click", function () {
-        // Backup current canvas content
-        const existingContent = context.getImageData(0, 0, canvas.width, canvas.height);
+  // Add a click event listener to the download button
+  downloadBtn.addEventListener("click", function () {
+    // Backup current canvas content
+    const existingContent = context.getImageData(
+      0,
+      0,
+      canvas.width,
+      canvas.height
+    );
 
-        // Set a white background first
-        setCanvasBackgroundWhite();
+    // Set a white background first
+    setCanvasBackgroundWhite();
 
-        // Redraw the existing content over the white background
-        context.putImageData(existingContent, 0, 0);
+    // Redraw the existing content over the white background
+    context.putImageData(existingContent, 0, 0);
 
-        // Export to a PNG file with the desired name
-        const imageData = canvas.toDataURL("image/png");
-        const link = document.createElement("a");
-        link.href = imageData;
-        link.download = "canvas_drawing.png";
+    // Export to a PNG file with the desired name
+    const imageData = canvas.toDataURL("image/png");
+    const link = document.createElement("a");
+    link.href = imageData;
+    link.download = "canvas_drawing.png";
 
-        // Trigger the download process
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
+    // Trigger the download process
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
 
         // Restore the original content (optional)
         context.putImageData(existingContent, 0, 0);
     });
+    */
+  const downloadBtn = document.getElementById("download-btn");
+
+  function uploadCanvasDataUrl() {
+    // Convert the canvas to a Base64-encoded image URL
+    const dataUrl = canvas.toDataURL("image/png");
+
+    // Send the data URL to the server via JSON data
+    fetch("/upload_canvas_url", {
+      method: "POST",
+      body: JSON.stringify({ data_url: dataUrl }),
+      headers: { "Content-Type": "application/json" },
+      credentials: "include", // Send session cookies
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.success) {
+          alert("Data URL stored successfully.");
+        } else {
+          alert("Error: " + data.error);
+        }
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+  }
+
+  downloadBtn.addEventListener("click", function () {
+    uploadCanvasDataUrl();
+  });
 </script>
 
 {% for msg in messages %}
